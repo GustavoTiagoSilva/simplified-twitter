@@ -13,7 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.Instant;
 
 @Entity
-@Table(name = "TWEETS")
+@Table(name = "TB_TWEETS")
 public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
