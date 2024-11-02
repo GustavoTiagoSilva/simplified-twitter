@@ -1,0 +1,16 @@
+version: '3'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: gustavo
+      POSTGRES_PASSWORD: 1234567
+      POSTGRES_DB: simplifiedtwitterdb
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+volumes:
+  postgres:
