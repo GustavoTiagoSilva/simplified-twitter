@@ -1,7 +1,9 @@
 package com.demo.simplified_twitter.service;
 
 import com.demo.simplified_twitter.dto.CreateUserRequestDto;
+import com.demo.simplified_twitter.dto.RoleDto;
 import com.demo.simplified_twitter.dto.UserDto;
+import com.demo.simplified_twitter.dto.UserResponseDto;
 import com.demo.simplified_twitter.entities.Role;
 import com.demo.simplified_twitter.entities.User;
 import com.demo.simplified_twitter.exceptions.BadCredentialsException;
@@ -15,7 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -36,7 +40,12 @@ public class UserService {
         var userEntity = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new BadCredentialsException("User or password is invalid"));
-        return new UserDto(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword());
+        var roles = userEntity
+                .getRoles()
+                .stream()
+                .map(role -> new RoleDto(role.getId(), role.getName()))
+                .collect(Collectors.toSet());
+        return new UserDto(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword(), roles);
     }
 
     @Transactional
@@ -55,5 +64,10 @@ public class UserService {
             newUser.setUsername(createUserRequest.username());
             userRepository.save(newUser);
         });
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponseDto> findAllUsers() {
+        return userRepository.findAll().stream().map(user -> new UserResponseDto(user.getUsername(), user.getRoles().stream().map(role -> new RoleDto(role.getId(), role.getName())).collect(Collectors.toSet()))).toList();
     }
 }

@@ -1,7 +1,7 @@
 package com.demo.simplified_twitter.controller;
 
+import com.demo.simplified_twitter.dto.JwtDto;
 import com.demo.simplified_twitter.dto.LoginRequestDto;
-import com.demo.simplified_twitter.dto.LoginResponseDto;
 import com.demo.simplified_twitter.service.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,7 @@ public class TokenController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequest) {
+    public JwtDto login(@RequestBody LoginRequestDto loginRequest) {
         return loginService.login(loginRequest);
     }
 }
