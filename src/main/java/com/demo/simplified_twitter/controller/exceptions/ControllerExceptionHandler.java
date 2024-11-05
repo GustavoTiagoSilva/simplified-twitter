@@ -3,6 +3,7 @@ package com.demo.simplified_twitter.controller.exceptions;
 import com.demo.simplified_twitter.dto.HttpErrorResponseDto;
 import com.demo.simplified_twitter.exceptions.BadCredentialsException;
 import com.demo.simplified_twitter.exceptions.ResourceAlreadyExistsException;
+import com.demo.simplified_twitter.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,21 @@ public class ControllerExceptionHandler {
                 Instant.now(),
                 httpStatus.value(),
                 "Bad Credentials",
+                e.getMessage(),
+                req.getRequestURI()
+        );
+
+        return new ResponseEntity<>(httpExceptionHandlerResponse, httpStatus);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<HttpErrorResponseDto> resourceNotFoundException(ResourceNotFoundException e, HttpServletRequest req) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+
+        HttpErrorResponseDto httpExceptionHandlerResponse = new HttpErrorResponseDto(
+                Instant.now(),
+                httpStatus.value(),
+                "Resource Not Found",
                 e.getMessage(),
                 req.getRequestURI()
         );

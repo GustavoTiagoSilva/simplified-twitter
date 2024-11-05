@@ -17,15 +17,18 @@ public class TokenService {
 
     private final String applicationName;
     private final JwtEncoder jwtEncoder;
+    private final String expiresIn;
 
     public TokenService(@Value("${spring.application.name}") String applicationName,
+                        @Value("${jwt.token.expires-in}") String expiresIn,
                         JwtEncoder jwtEncoder) {
         this.applicationName = applicationName;
         this.jwtEncoder = jwtEncoder;
+        this.expiresIn = expiresIn;
     }
 
     public JwtDto getJwtForUser(UserDto user) {
-        long expiresIn = 300L;
+        long expiresIn = Long.parseLong(this.expiresIn);
         var scopes = user.roles().stream().map(RoleDto::name).collect(Collectors.joining(" "));
         var claims = JwtClaimsSet.builder()
                 .issuer(this.applicationName)

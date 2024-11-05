@@ -28,4 +28,12 @@ public class TweetService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + jwtAuthenticationToken.getName() + " not found"));
         tweetRepository.save(new Tweet(null, user, createTweetRequest.content()));
     }
+
+    public void deleteTweet(Long id, JwtAuthenticationToken jwtAuthenticationToken) {
+        var user = userRepository
+                .findById(UUID.fromString(jwtAuthenticationToken.getName()))
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + jwtAuthenticationToken.getName() + " not found"));
+        var userTweet = tweetRepository.findByIdAndUser(id, user).orElseThrow(() -> new ResourceNotFoundException("Tweet with id: " + id + " not found for user with id: " + user.getId()));
+        tweetRepository.delete(userTweet);
+    }
 }
