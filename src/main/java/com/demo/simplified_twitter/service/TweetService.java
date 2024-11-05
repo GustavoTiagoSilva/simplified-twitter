@@ -1,6 +1,6 @@
 package com.demo.simplified_twitter.service;
 
-import com.demo.simplified_twitter.dto.CreateTweetDto;
+import com.demo.simplified_twitter.dto.CreateTweetRequestDto;
 import com.demo.simplified_twitter.entities.Tweet;
 import com.demo.simplified_twitter.exceptions.ResourceNotFoundException;
 import com.demo.simplified_twitter.repositories.TweetRepository;
@@ -22,7 +22,7 @@ public class TweetService {
     }
 
     @Transactional
-    public void createTweet(CreateTweetDto createTweetRequest, JwtAuthenticationToken jwtAuthenticationToken) {
+    public void createTweet(CreateTweetRequestDto createTweetRequest, JwtAuthenticationToken jwtAuthenticationToken) {
         var user = userRepository
                 .findById(UUID.fromString(jwtAuthenticationToken.getName()))
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + jwtAuthenticationToken.getName() + " not found"));

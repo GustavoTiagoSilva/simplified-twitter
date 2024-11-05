@@ -1,6 +1,6 @@
 package com.demo.simplified_twitter.controller;
 
-import com.demo.simplified_twitter.dto.CreateTweetDto;
+import com.demo.simplified_twitter.dto.CreateTweetRequestDto;
 import com.demo.simplified_twitter.service.TweetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -22,7 +22,7 @@ public class TweetController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTweet(@RequestBody CreateTweetDto createTweetRequest, JwtAuthenticationToken jwtAuthenticationToken) {
+    public void createTweet(@RequestBody CreateTweetRequestDto createTweetRequest, JwtAuthenticationToken jwtAuthenticationToken) {
         tweetService.createTweet(createTweetRequest, jwtAuthenticationToken);
     }
 
