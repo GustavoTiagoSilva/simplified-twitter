@@ -60,7 +60,7 @@ public class UserService {
                     .findByName(Role.Values.BASIC.name())
                     .orElseThrow(() -> exception);
             newUser.setPassword(passwordEncoder.encode(createUserRequest.password()));
-            newUser.setRoles(Set.of(role));
+                newUser.setRoles(Set.of(role));
             newUser.setUsername(createUserRequest.username());
             userRepository.save(newUser);
         });
