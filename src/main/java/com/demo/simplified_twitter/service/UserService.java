@@ -54,7 +54,7 @@ public class UserService {
             log.error("Username '{}' already exists", user.getUsername());
             throw new ResourceAlreadyExistsException("Username: " + user.getUsername() + " already exists");
         }, () -> {
-            var exception = new ResourceNotFoundException("Role with name: " + Role.Values.BASIC.name() + " not found");
+            var exception = new ResourceNotFoundException("Role not found");
             User newUser = new User();
             Role role = roleRepository
                     .findByName(Role.Values.BASIC.name())

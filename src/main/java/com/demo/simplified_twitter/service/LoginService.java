@@ -28,10 +28,10 @@ public class LoginService {
         if (!this.isLoginCorrect(loginRequest, user.password())) {
             throw new BadCredentialsException("User or password is invalid");
         }
-        return tokenService.getJwtForUser(user);
+        return tokenService.getJwt(user);
     }
 
-    public boolean isLoginCorrect(LoginRequestDto loginRequest, String password) {
+    private boolean isLoginCorrect(LoginRequestDto loginRequest, String password) {
         return passwordEncoder.matches(loginRequest.password(), password);
     }
 }

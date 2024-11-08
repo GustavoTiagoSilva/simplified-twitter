@@ -27,7 +27,7 @@ public class TokenService {
         this.expiresIn = expiresIn;
     }
 
-    public JwtDto getJwtForUser(UserDto user) {
+    public JwtDto getJwt(UserDto user) {
         var scopes = user.roles().stream().map(RoleDto::name).collect(Collectors.joining(" "));
         var claims = JwtClaimsSet.builder()
                 .issuer(this.applicationName)
