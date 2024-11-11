@@ -68,6 +68,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserResponseDto> findAllUsers() {
-        return userRepository.findAll().stream().map(user -> new UserResponseDto(user.getUsername(), user.getRoles().stream().map(role -> new RoleDto(role.getId(), role.getName())).collect(Collectors.toSet()))).toList();
+        return userRepository.findAll().stream().map(user -> new UserResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getRoles()
+                        .stream()
+                        .map(role -> new RoleDto(role.getId(), role.getName())).collect(Collectors.toSet()))).toList();
     }
 }

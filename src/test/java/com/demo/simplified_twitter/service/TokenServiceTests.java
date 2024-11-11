@@ -45,8 +45,8 @@ class TokenServiceTests {
         var claims = JwtClaimsSet.builder()
                 .issuer(this.applicationName)
                 .subject(user.id().toString())
-                .expiresAt(Instant.now())
                 .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds(1000L))
                 .claim("scope", scopes)
                 .build();
         Jwt jwt = new Jwt(tokenValue, Instant.now(), Instant.now(), Map.of("alg", "RS256"), claims.getClaims());

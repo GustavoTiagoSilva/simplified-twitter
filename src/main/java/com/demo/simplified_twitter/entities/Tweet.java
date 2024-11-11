@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "TB_TWEETS")
@@ -66,5 +67,18 @@ public class Tweet {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tweet tweet = (Tweet) o;
+        return Objects.equals(id, tweet.id) && Objects.equals(user, tweet.user) && Objects.equals(content, tweet.content) && Objects.equals(createdAt, tweet.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, content, createdAt);
     }
 }
