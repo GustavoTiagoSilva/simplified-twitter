@@ -6,6 +6,7 @@ import com.demo.simplified_twitter.dto.RoleDto;
 import com.demo.simplified_twitter.dto.UserDto;
 import com.demo.simplified_twitter.entities.Role;
 import com.demo.simplified_twitter.entities.User;
+import com.demo.simplified_twitter.exceptions.BadCredentialsException;
 import com.demo.simplified_twitter.faker.LoginRequestFaker;
 import com.demo.simplified_twitter.faker.UserEntityFaker;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -31,7 +33,7 @@ class LoginServiceTests {
     @Test
     @DisplayName("Should return a valid jwt access token when existing user is informed")
     void shouldReturnAValidJwtAccessTokenWhenExistingUserIsInformed() {
-        LoginRequestDto loginRequest = LoginRequestFaker.fakeLoginRequestWithExistingUser();
+        LoginRequestDto loginRequest = LoginRequestFaker.fakeLoginRequest();
         User userEntity = UserEntityFaker.fakeUserWithId(Role.Values.ADMIN);
         Set<RoleDto> roles = userEntity.getRoles().stream().map(role -> new RoleDto(role.getId(), role.getName())).collect(Collectors.toSet());
         UserDto user = new UserDto(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword(), roles);
@@ -44,5 +46,22 @@ class LoginServiceTests {
 
         assertThat(jwt).isEqualTo(expectedJwtToBeReturned);
         verify(userService, times(1)).findByUsername(loginRequest.username());
+    }
+
+    @Test
+    @DisplayName("Should throw [BadCredentialsException] when credentials are invalid")
+    void shouldThrowBadCredentialsExceptionWhenCredentialsAreInvalid() {
+        LoginRequestDto invalidLoginRequest = LoginRequestFaker.fakeLoginRequest();
+        User userEntity = UserEntityFaker.fakeUserWithId(Role.Values.ADMIN);
+        Set<RoleDto> roles = userEntity.getRoles().stream().map(role -> new RoleDto(role.getId(), role.getName())).collect(Collectors.toSet());
+        UserDto user = new UserDto(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword(), roles);
+        when(userService.findByUsername(invalidLoginRequest.username())).thenReturn(user);
+        when(passwordEncoder.matches(any(String.class), any(String.class))).thenReturn(Boolean.FALSE);
+
+        var exception = assertThrows(BadCredentialsException.class, () -> loginService.login(invalidLoginRequest));
+
+        assertThat(exception.getMessage()).isEqualTo("User or password is invalid");
+        verify(userService, times(1)).findByUsername(invalidLoginRequest.username());
+        verify(tokenService, times(0)).getJwt(user);
     }
 }

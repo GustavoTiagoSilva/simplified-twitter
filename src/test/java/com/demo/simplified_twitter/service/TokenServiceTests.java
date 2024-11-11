@@ -35,7 +35,11 @@ class TokenServiceTests {
     void shouldReturnJwtTokenWhenValidUser() {
         String tokenValue = "jwtToken";
         User userEntity = UserEntityFaker.fakeUserWithId(Role.Values.ADMIN);
-        Set<RoleDto> roles = userEntity.getRoles().stream().map(role -> new RoleDto(role.getId(), role.getName())).collect(Collectors.toSet());
+        Set<RoleDto> roles = userEntity
+                .getRoles()
+                .stream()
+                .map(role -> new RoleDto(role.getId(), role.getName()))
+                .collect(Collectors.toSet());
         UserDto user = new UserDto(userEntity.getId(), userEntity.getUsername(), userEntity.getPassword(), roles);
         var scopes = user.roles().stream().map(RoleDto::name).collect(Collectors.joining(" "));
         var claims = JwtClaimsSet.builder()
