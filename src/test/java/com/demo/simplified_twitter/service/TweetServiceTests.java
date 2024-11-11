@@ -53,10 +53,10 @@ class TweetServiceTests {
                 .issuer(this.applicationName)
                 .subject(user.id().toString())
                 .expiresAt(Instant.now())
-                .issuedAt(Instant.now())
+                .issuedAt(Instant.now().plusSeconds(1000L))
                 .claim("scope", scopes)
                 .build();
-        Jwt jwt = new Jwt(tokenValue, Instant.now(), Instant.now(), Map.of("alg", "RS256"), claims.getClaims());
+        Jwt jwt = new Jwt(tokenValue, Instant.now(), Instant.now().plusSeconds(1000L), Map.of("alg", "RS256"), claims.getClaims());
         JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwt);
         CreateTweetRequestDto createTweetRequest = new CreateTweetRequestDto("Hello World");
         when(userRepository.findById(UUID.fromString(jwtAuthenticationToken.getName()))).thenReturn(Optional.of(userEntity));

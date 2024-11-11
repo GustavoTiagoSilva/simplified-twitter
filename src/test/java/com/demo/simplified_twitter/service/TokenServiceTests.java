@@ -49,7 +49,7 @@ class TokenServiceTests {
                 .expiresAt(Instant.now().plusSeconds(1000L))
                 .claim("scope", scopes)
                 .build();
-        Jwt jwt = new Jwt(tokenValue, Instant.now(), Instant.now(), Map.of("alg", "RS256"), claims.getClaims());
+        Jwt jwt = new Jwt(tokenValue, Instant.now(), Instant.now().plusSeconds(1000L), Map.of("alg", "RS256"), claims.getClaims());
         when(jwtEncoder.encode(any(JwtEncoderParameters.class))).thenReturn(jwt);
 
         JwtDto jwtDto = tokenService.getJwt(user);

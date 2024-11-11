@@ -84,4 +84,13 @@ class UserControllerTests {
         httpResponse.andExpect(status().isOk());
         verify(userService, times(1)).findAllUsers();
     }
+
+    @Test
+    @DisplayName("Should return [forbidden] when user does not have [ADMIN] permission")
+    void shouldReturnForbiddenWhenUserDoesNotHaveAdminPermission() throws Exception {
+        var httpResponse = this.mockMvc.perform(get("/users").with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_BASIC"))).contentType(MediaType.APPLICATION_JSON_VALUE));
+
+        httpResponse.andExpect(status().isForbidden());
+        verify(userService, times(0)).findAllUsers();
+    }
 }
