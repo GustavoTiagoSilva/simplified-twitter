@@ -7,6 +7,7 @@ import com.demo.simplified_twitter.dto.RoleDto;
 import com.demo.simplified_twitter.dto.UserResponseDto;
 import com.demo.simplified_twitter.exceptions.ResourceAlreadyExistsException;
 import com.demo.simplified_twitter.faker.CreateUserRequestFaker;
+import com.demo.simplified_twitter.faker.UserResponseDtoFaker;
 import com.demo.simplified_twitter.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -81,14 +82,7 @@ class UserControllerTests {
     @Test
     @DisplayName("Should return all users when a user with admin permission is requesting the information")
     void shouldRetrieveAllUsersWhenAdminUserIsRequesting() throws Exception {
-        List<UserResponseDto> expectedListOfUsersToBeReturned = new ArrayList<>();
-        expectedListOfUsersToBeReturned.add(new UserResponseDto(UUID.randomUUID(), "gustavo", Set.of(new RoleDto(1L, "ADMIN"))));
-        expectedListOfUsersToBeReturned.add(new UserResponseDto(UUID.randomUUID(), "henrique", Set.of(new RoleDto(1L, "ADMIN"))));
-        expectedListOfUsersToBeReturned.add(new UserResponseDto(UUID.randomUUID(), "carol", Set.of(new RoleDto(1L, "ADMIN"))));
-        expectedListOfUsersToBeReturned.add(new UserResponseDto(UUID.randomUUID(), "paula", Set.of(new RoleDto(1L, "ADMIN"))));
-        expectedListOfUsersToBeReturned.add(new UserResponseDto(UUID.randomUUID(), "daniel", Set.of(new RoleDto(1L, "ADMIN"))));
-        expectedListOfUsersToBeReturned.add(new UserResponseDto(UUID.randomUUID(), "pedro", Set.of(new RoleDto(1L, "ADMIN"))));
-        expectedListOfUsersToBeReturned.add(new UserResponseDto(UUID.randomUUID(), "joão", Set.of(new RoleDto(1L, "ADMIN"))));
+        List<UserResponseDto> expectedListOfUsersToBeReturned = UserResponseDtoFaker.fakeMany();
         when(userService.findAllUsers()).thenReturn(expectedListOfUsersToBeReturned);
 
         var httpResponse = this.mockMvc.perform(get("/users").with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN"))).contentType(MediaType.APPLICATION_JSON_VALUE));
