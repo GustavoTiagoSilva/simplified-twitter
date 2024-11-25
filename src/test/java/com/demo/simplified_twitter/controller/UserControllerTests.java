@@ -3,7 +3,6 @@ package com.demo.simplified_twitter.controller;
 import com.demo.simplified_twitter.config.SecurityConfig;
 import com.demo.simplified_twitter.dto.CreateUserRequestDto;
 import com.demo.simplified_twitter.dto.HttpErrorResponseDto;
-import com.demo.simplified_twitter.dto.RoleDto;
 import com.demo.simplified_twitter.dto.UserResponseDto;
 import com.demo.simplified_twitter.exceptions.ResourceAlreadyExistsException;
 import com.demo.simplified_twitter.faker.CreateUserRequestFaker;
@@ -27,12 +26,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
